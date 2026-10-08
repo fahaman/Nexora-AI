@@ -104,7 +104,9 @@ function AdminPanel() {
 
   const [usersList, setUsersList] = useState<AdminUserRecord[]>(() => loadLocalUsers());
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"users" | "businesses" | "inventory" | "employees">("users");
+  const [activeTab, setActiveTab] = useState<"users" | "businesses" | "inventory" | "employees">(
+    "users",
+  );
 
   // Filter by selected business in tabs
   const [selectedFilterBiz, setSelectedFilterBiz] = useState<string>("all");
@@ -362,12 +364,16 @@ function AdminPanel() {
 
   const filteredInventory = useMemo(() => {
     if (selectedFilterBiz === "all") return inventory;
-    return inventory.filter((i) => i.businessId === selectedFilterBiz || i.business === selectedFilterBiz);
+    return inventory.filter(
+      (i) => i.businessId === selectedFilterBiz || i.business === selectedFilterBiz,
+    );
   }, [inventory, selectedFilterBiz]);
 
   const filteredEmployees = useMemo(() => {
     if (selectedFilterBiz === "all") return employees;
-    return employees.filter((e) => e.businessId === selectedFilterBiz || e.business === selectedFilterBiz);
+    return employees.filter(
+      (e) => e.businessId === selectedFilterBiz || e.business === selectedFilterBiz,
+    );
   }, [employees, selectedFilterBiz]);
 
   return (
@@ -563,7 +569,9 @@ function AdminPanel() {
                           <Trash2 className="w-4 h-4" />
                         </button>
                       ) : (
-                        <span className="text-xs text-muted-foreground italic">Protected Master</span>
+                        <span className="text-xs text-muted-foreground italic">
+                          Protected Master
+                        </span>
                       )}
                     </td>
                   </tr>
@@ -604,8 +612,12 @@ function AdminPanel() {
               </thead>
               <tbody className="divide-y divide-border text-sm">
                 {businesses.map((b) => {
-                  const bInvCount = inventory.filter((i) => i.businessId === b.id || i.business === b.name).length;
-                  const bEmpCount = employees.filter((e) => e.businessId === b.id || e.business === b.name).length;
+                  const bInvCount = inventory.filter(
+                    (i) => i.businessId === b.id || i.business === b.name,
+                  ).length;
+                  const bEmpCount = employees.filter(
+                    (e) => e.businessId === b.id || e.business === b.name,
+                  ).length;
                   return (
                     <tr key={b.id} className="hover:bg-muted/10">
                       <td className="p-4 flex items-center gap-3">
@@ -688,7 +700,9 @@ function AdminPanel() {
                   <tr key={item.id} className="hover:bg-muted/10">
                     <td className="p-4">
                       <div className="font-semibold text-foreground">{item.name}</div>
-                      <div className="font-mono text-xs text-muted-foreground">{item.sku || "N/A"}</div>
+                      <div className="font-mono text-xs text-muted-foreground">
+                        {item.sku || "N/A"}
+                      </div>
                     </td>
                     <td className="p-4 font-medium text-muted-foreground">{item.business}</td>
                     <td className="p-4 text-xs">{item.category}</td>
@@ -928,7 +942,9 @@ function AdminPanel() {
             </div>
             <form onSubmit={handleAddBusiness} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-muted-foreground">Business Name</label>
+                <label className="block text-xs font-medium text-muted-foreground">
+                  Business Name
+                </label>
                 <input
                   value={bizName}
                   onChange={(e) => setBizName(e.target.value)}
@@ -951,7 +967,9 @@ function AdminPanel() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-muted-foreground">Emoji Icon</label>
+                  <label className="block text-xs font-medium text-muted-foreground">
+                    Emoji Icon
+                  </label>
                   <input
                     value={bizEmoji}
                     onChange={(e) => setBizEmoji(e.target.value)}
@@ -959,10 +977,14 @@ function AdminPanel() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-muted-foreground">Theme Color</label>
+                  <label className="block text-xs font-medium text-muted-foreground">
+                    Theme Color
+                  </label>
                   <select
                     value={bizColor}
-                    onChange={(e) => setBizColor(e.target.value as any)}
+                    onChange={(e) =>
+                      setBizColor(e.target.value as "violet" | "cyan" | "success" | "warning")
+                    }
                     className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none"
                   >
                     <option value="violet">Violet</option>
@@ -1008,7 +1030,9 @@ function AdminPanel() {
             </div>
             <form onSubmit={handleAddInventory} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-muted-foreground">Target Business</label>
+                <label className="block text-xs font-medium text-muted-foreground">
+                  Target Business
+                </label>
                 <select
                   value={invBizId}
                   onChange={(e) => setInvBizId(e.target.value)}
@@ -1023,7 +1047,9 @@ function AdminPanel() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-muted-foreground">Product Name</label>
+                <label className="block text-xs font-medium text-muted-foreground">
+                  Product Name
+                </label>
                 <input
                   value={invName}
                   onChange={(e) => setInvName(e.target.value)}
@@ -1035,7 +1061,9 @@ function AdminPanel() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-muted-foreground">Quantity</label>
+                  <label className="block text-xs font-medium text-muted-foreground">
+                    Quantity
+                  </label>
                   <input
                     value={invQty}
                     onChange={(e) => setInvQty(e.target.value)}
@@ -1046,7 +1074,9 @@ function AdminPanel() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-muted-foreground">Unit Price (₹)</label>
+                  <label className="block text-xs font-medium text-muted-foreground">
+                    Unit Price (₹)
+                  </label>
                   <input
                     value={invUnitPrice}
                     onChange={(e) => setInvUnitPrice(e.target.value)}
@@ -1093,7 +1123,9 @@ function AdminPanel() {
             </div>
             <form onSubmit={handleAddEmployee} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-muted-foreground">Target Business</label>
+                <label className="block text-xs font-medium text-muted-foreground">
+                  Target Business
+                </label>
                 <select
                   value={empBizId}
                   onChange={(e) => setEmpBizId(e.target.value)}
@@ -1108,7 +1140,9 @@ function AdminPanel() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-muted-foreground">Staff Member Name</label>
+                <label className="block text-xs font-medium text-muted-foreground">
+                  Staff Member Name
+                </label>
                 <input
                   value={empName}
                   onChange={(e) => setEmpName(e.target.value)}
@@ -1119,7 +1153,9 @@ function AdminPanel() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-muted-foreground">Designation / Role</label>
+                <label className="block text-xs font-medium text-muted-foreground">
+                  Designation / Role
+                </label>
                 <input
                   value={empRole}
                   onChange={(e) => setEmpRole(e.target.value)}
@@ -1130,7 +1166,9 @@ function AdminPanel() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-muted-foreground">Monthly Salary (₹)</label>
+                <label className="block text-xs font-medium text-muted-foreground">
+                  Monthly Salary (₹)
+                </label>
                 <input
                   value={empSalary}
                   onChange={(e) => setEmpSalary(e.target.value)}
