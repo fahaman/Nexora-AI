@@ -332,7 +332,7 @@ function BusinessesPage() {
                   </label>
                   <select
                     value={color}
-                    onChange={(e) => setColor(e.target.value as any)}
+                    onChange={(e) => setColor(e.target.value as "violet" | "cyan" | "success" | "warning")}
                     className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                   >
                     <option value="violet">Violet</option>

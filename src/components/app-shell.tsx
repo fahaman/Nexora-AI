@@ -16,11 +16,14 @@ import {
   Moon,
   Sun,
   ShieldAlert,
+  Menu,
+  X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { authStore, useAuth } from "@/lib/auth-store";
-import { businesses, notifications } from "@/lib/mock-data";
+import { notifications } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { useAppData } from "@/lib/app-store";
 
 const navItems = [
   { to: "/app", label: "Overview", icon: LayoutDashboard, exact: true },
@@ -33,8 +36,6 @@ const navItems = [
   { to: "/app/ai-insights", label: "AI Insights", icon: Sparkles },
   { to: "/app/settings", label: "Settings", icon: Settings },
 ];
-
-import { useAppData, appStore } from "@/lib/app-store";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { user, businessId } = useAuth();
@@ -49,6 +50,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return true;
   });
   const [notifOpen, setNotifOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -69,9 +71,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     emoji: "🌐",
   };
 
+  const navList = user?.email === "admin@nexora.com"
+    ? [...navItems, { to: "/app/admin", label: "Admin Panel", icon: ShieldAlert }]
+    : navItems;
+
   return (
     <div className="min-h-screen flex bg-background text-foreground">
-      {/* Sidebar */}
+      {/* Desktop Sidebar */}
       <aside className="hidden lg:flex w-64 flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border sticky top-0 h-screen">
         <Link to="/" className="px-6 h-16 flex items-center gap-2 border-b border-sidebar-border">
           <div className="w-8 h-8 rounded-lg bg-gradient-primary shadow-glow grid place-items-center">
@@ -101,10 +107,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
-          {(user?.email === "admin@nexora.com"
-            ? [...navItems, { to: "/app/admin", label: "Admin Panel", icon: ShieldAlert }]
-            : navItems
-          ).map((item) => {
+          {navList.map((item) => {
             const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
             return (
               <Link
@@ -145,13 +148,105 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      {/* Main */}
+      {/* Mobile Drawer Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex">
+          <div
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <aside className="relative w-72 max-w-[80vw] bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col h-full z-10 shadow-2xl animate-in slide-in-from-left duration-200">
+            <div className="px-6 h-16 flex items-center justify-between border-b border-sidebar-border">
+              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-gradient-primary shadow-glow grid place-items-center">
+                  <Sparkles className="w-4 h-4 text-white" />
+                </div>
+                <span className="font-display text-lg font-semibold tracking-tight">
+                  Nexora<span className="text-gradient">AI</span>
+                </span>
+              </Link>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1 rounded-lg hover:bg-sidebar-accent text-sidebar-foreground/70"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="px-3 py-4">
+              <div className="px-3 text-[11px] uppercase tracking-wider text-sidebar-foreground/50 mb-2">
+                Active business
+              </div>
+              <select
+                value={businessId}
+                onChange={(e) => {
+                  authStore.setBusiness(e.target.value);
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full bg-sidebar-accent/60 text-sidebar-foreground border border-sidebar-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+              >
+                <option value="all">🌐 All Businesses ({businesses.length})</option>
+                {businesses.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.emoji} {b.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
+              {navList.map((item) => {
+                const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                      active
+                        ? "bg-gradient-primary text-white shadow-glow"
+                        : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/40",
+                    )}
+                  >
+                    <item.icon className="w-4 h-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            <div className="p-3 border-t border-sidebar-border">
+              <button
+                onClick={() => {
+                  authStore.logout();
+                  navigate({ to: "/login" });
+                }}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/40 transition"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign out
+              </button>
+            </div>
+          </aside>
+        </div>
+      )}
+
+      {/* Main Container */}
       <div className="flex-1 min-w-0 flex flex-col">
         <header className="sticky top-0 z-30 h-16 border-b border-border bg-background/70 backdrop-blur-xl flex items-center gap-3 px-4 lg:px-8">
-          <div className="w-10 h-10 rounded-lg bg-gradient-violet grid place-items-center text-white font-semibold shadow-soft shrink-0">
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="lg:hidden p-2 rounded-lg border border-border hover:bg-muted text-muted-foreground hover:text-foreground cursor-pointer"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
+          <div className="w-9 h-9 rounded-lg bg-gradient-violet grid place-items-center text-white font-semibold shadow-soft shrink-0 text-sm">
             {userInitials}
           </div>
-          <div className="lg:hidden font-display font-semibold text-gradient">NexoraAI</div>
+          <div className="lg:hidden font-display font-semibold text-gradient text-base">NexoraAI</div>
+
           <div className="hidden md:flex items-center gap-2 px-3 h-10 rounded-lg bg-muted/60 border border-border w-full max-w-md">
             <Search className="w-4 h-4 text-muted-foreground" />
             <input
@@ -162,20 +257,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               ⌘K
             </kbd>
           </div>
+
           <div className="ml-auto flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-2 px-3 h-10 rounded-lg border border-border bg-card">
               <span className="text-lg leading-none">{activeBiz.emoji}</span>
               <div className="leading-tight">
-                <div className="text-xs text-muted-foreground">Viewing</div>
-                <div className="text-sm font-medium">{activeBiz.name}</div>
+                <div className="text-[10px] text-muted-foreground uppercase font-medium">Viewing</div>
+                <div className="text-xs font-semibold">{activeBiz.name}</div>
               </div>
             </div>
+
             <button
               onClick={() => setDark((d) => !d)}
               className="w-10 h-10 grid place-items-center rounded-lg border border-border hover:bg-muted cursor-pointer"
             >
               {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
+
             <div className="relative">
               <button
                 onClick={() => setNotifOpen((o) => !o)}
