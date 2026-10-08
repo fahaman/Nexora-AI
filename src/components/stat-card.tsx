@@ -13,7 +13,12 @@ const variants: Record<Variant, string> = {
 };
 
 export function StatCard({
-  label, value, delta, icon: Icon, variant = "primary", index = 0,
+  label,
+  value,
+  delta,
+  icon: Icon,
+  variant = "primary",
+  index = 0,
 }: {
   label: string;
   value: string;
@@ -30,20 +35,38 @@ export function StatCard({
       transition={{ duration: 0.4, delay: index * 0.06 }}
       className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-card p-5"
     >
-      <div className={cn("absolute -top-12 -right-12 w-40 h-40 rounded-full opacity-25 blur-2xl", variants[variant])} />
+      <div
+        className={cn(
+          "absolute -top-12 -right-12 w-40 h-40 rounded-full opacity-25 blur-2xl",
+          variants[variant],
+        )}
+      />
       <div className="flex items-start justify-between relative">
         <div>
           <div className="text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
           <div className="mt-2 text-3xl font-display font-semibold tracking-tight">{value}</div>
           {delta !== undefined && (
-            <div className={cn("mt-2 inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full",
-              positive ? "text-success bg-success/10" : "text-destructive bg-destructive/10")}>
-              {positive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+            <div
+              className={cn(
+                "mt-2 inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full",
+                positive ? "text-success bg-success/10" : "text-destructive bg-destructive/10",
+              )}
+            >
+              {positive ? (
+                <ArrowUpRight className="w-3 h-3" />
+              ) : (
+                <ArrowDownRight className="w-3 h-3" />
+              )}
               {Math.abs(delta).toFixed(1)}% vs. last month
             </div>
           )}
         </div>
-        <div className={cn("w-11 h-11 rounded-xl grid place-items-center text-white shadow-glow", variants[variant])}>
+        <div
+          className={cn(
+            "w-11 h-11 rounded-xl grid place-items-center text-white shadow-glow",
+            variants[variant],
+          )}
+        >
           <Icon className="w-5 h-5" />
         </div>
       </div>

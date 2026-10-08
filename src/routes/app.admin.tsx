@@ -2,7 +2,22 @@ import { createFileRoute, redirect, Link } from "@tanstack/react-router";
 import { authStore } from "@/lib/auth-store";
 import { useEffect, useState } from "react";
 import { adminApi, type AdminDashboardResponse } from "@/lib/api/endpoints";
-import { Users, Building2, ShieldAlert, Activity, ArrowLeft, Loader2, Phone, FileText, Trash2, Plus, X, Award, AlertTriangle, BadgeAlert } from "lucide-react";
+import {
+  Users,
+  Building2,
+  ShieldAlert,
+  Activity,
+  ArrowLeft,
+  Loader2,
+  Phone,
+  FileText,
+  Trash2,
+  Plus,
+  X,
+  Award,
+  AlertTriangle,
+  BadgeAlert,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/admin")({
@@ -87,7 +102,11 @@ function AdminPanel() {
       toast.error("Cannot delete master admin account");
       return;
     }
-    if (!confirm(`Are you sure you want to delete user ${userEmail}? This will also delete all their businesses, sales, and employee data.`)) {
+    if (
+      !confirm(
+        `Are you sure you want to delete user ${userEmail}? This will also delete all their businesses, sales, and employee data.`,
+      )
+    ) {
       return;
     }
     try {
@@ -113,7 +132,10 @@ function AdminPanel() {
         <ShieldAlert className="w-12 h-12 text-destructive mx-auto" />
         <h2 className="text-lg font-semibold mt-4">Admin Dashboard Error</h2>
         <p className="text-sm text-muted-foreground mt-2">{error}</p>
-        <Link to="/app" className="mt-6 inline-flex items-center gap-2 text-sm text-primary font-medium">
+        <Link
+          to="/app"
+          className="mt-6 inline-flex items-center gap-2 text-sm text-primary font-medium"
+        >
           <ArrowLeft className="w-4 h-4" /> Go back to app
         </Link>
       </div>
@@ -126,7 +148,9 @@ function AdminPanel() {
       <div className="flex justify-between items-center flex-wrap gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Admin Control Center</h1>
-          <p className="text-muted-foreground mt-1">Manage global system metrics, registered users, and active businesses.</p>
+          <p className="text-muted-foreground mt-1">
+            Manage global system metrics, registered users, and active businesses.
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -169,8 +193,12 @@ function AdminPanel() {
             <Award className="w-5 h-5" />
           </div>
           <div>
-            <p className="text-xs font-medium text-muted-foreground text-emerald-600 dark:text-emerald-400">Doing Well</p>
-            <h3 className="text-xl font-bold mt-0.5 text-emerald-600 dark:text-emerald-400">{data?.stats.doingWell ?? 0}</h3>
+            <p className="text-xs font-medium text-muted-foreground text-emerald-600 dark:text-emerald-400">
+              Doing Well
+            </p>
+            <h3 className="text-xl font-bold mt-0.5 text-emerald-600 dark:text-emerald-400">
+              {data?.stats.doingWell ?? 0}
+            </h3>
           </div>
         </div>
 
@@ -179,8 +207,12 @@ function AdminPanel() {
             <AlertTriangle className="w-5 h-5" />
           </div>
           <div>
-            <p className="text-xs font-medium text-muted-foreground text-amber-600 dark:text-amber-400">Consultancy Needs</p>
-            <h3 className="text-xl font-bold mt-0.5 text-amber-600 dark:text-amber-400">{data?.stats.needsConsultancy ?? 0}</h3>
+            <p className="text-xs font-medium text-muted-foreground text-amber-600 dark:text-amber-400">
+              Consultancy Needs
+            </p>
+            <h3 className="text-xl font-bold mt-0.5 text-amber-600 dark:text-amber-400">
+              {data?.stats.needsConsultancy ?? 0}
+            </h3>
           </div>
         </div>
 
@@ -201,7 +233,9 @@ function AdminPanel() {
         <div className="rounded-2xl border border-border bg-card shadow-card overflow-hidden">
           <div className="p-5 border-b border-border bg-muted/20">
             <h2 className="text-lg font-semibold tracking-tight">System Users</h2>
-            <p className="text-xs text-muted-foreground">Overview of registered user accounts and their contact info.</p>
+            <p className="text-xs text-muted-foreground">
+              Overview of registered user accounts and their contact info.
+            </p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -219,7 +253,9 @@ function AdminPanel() {
                     <td className="p-4">
                       <div className="font-medium text-foreground flex items-center gap-1.5">
                         {u.name}
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-primary/10 text-primary capitalize font-medium">{u.role}</span>
+                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-primary/10 text-primary capitalize font-medium">
+                          {u.role}
+                        </span>
                       </div>
                       <div className="text-xs text-muted-foreground">{u.email}</div>
                     </td>
@@ -271,7 +307,9 @@ function AdminPanel() {
         <div className="rounded-2xl border border-border bg-card shadow-card overflow-hidden">
           <div className="p-5 border-b border-border bg-muted/20">
             <h2 className="text-lg font-semibold tracking-tight">Active Businesses Health</h2>
-            <p className="text-xs text-muted-foreground">Overview of all active businesses under the SaaS platform.</p>
+            <p className="text-xs text-muted-foreground">
+              Overview of all active businesses under the SaaS platform.
+            </p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -306,18 +344,29 @@ function AdminPanel() {
                       </span>
                     </td>
                     <td className="p-4">
-                      <div className="font-display font-semibold">₹{(b as any).revenue?.toLocaleString() ?? 0}</div>
-                      <div className={`text-xs ${(b as any).profit >= 0 ? "text-emerald-500" : "text-destructive"}`}>
-                        {(b as any).profit >= 0 ? "+" : ""}₹{(b as any).profit?.toLocaleString() ?? 0}
+                      <div className="font-display font-semibold">
+                        ₹{(b as any).revenue?.toLocaleString() ?? 0}
+                      </div>
+                      <div
+                        className={`text-xs ${(b as any).profit >= 0 ? "text-emerald-500" : "text-destructive"}`}
+                      >
+                        {(b as any).profit >= 0 ? "+" : ""}₹
+                        {(b as any).profit?.toLocaleString() ?? 0}
                       </div>
                     </td>
                     <td className="p-4">
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                        (b as any).status === "Doing Well" 
-                          ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20" 
-                          : "bg-amber-500/10 text-amber-500 border border-amber-500/20"
-                      }`}>
-                        {(b as any).status === "Doing Well" ? <Award className="w-3 h-3" /> : <BadgeAlert className="w-3 h-3" />}
+                      <span
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                          (b as any).status === "Doing Well"
+                            ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20"
+                            : "bg-amber-500/10 text-amber-500 border border-amber-500/20"
+                        }`}
+                      >
+                        {(b as any).status === "Doing Well" ? (
+                          <Award className="w-3 h-3" />
+                        ) : (
+                          <BadgeAlert className="w-3 h-3" />
+                        )}
                         {(b as any).status}
                       </span>
                     </td>
@@ -335,34 +384,60 @@ function AdminPanel() {
           <div className="bg-card border border-border w-full max-w-md rounded-2xl shadow-card overflow-hidden animate-in fade-in zoom-in duration-200">
             <div className="p-6 border-b border-border flex justify-between items-center">
               <h2 className="text-xl font-bold tracking-tight">Add System User</h2>
-              <button onClick={() => setIsModalOpen(false)} className="p-1 rounded-lg border border-border hover:bg-muted cursor-pointer text-muted-foreground hover:text-foreground">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="p-1 rounded-lg border border-border hover:bg-muted cursor-pointer text-muted-foreground hover:text-foreground"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>
             <form onSubmit={handleAddUser} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-medium text-muted-foreground">Full Name</label>
-                <input value={name} onChange={(e) => setName(e.target.value)} required placeholder="e.g. John Doe"
-                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  placeholder="e.g. John Doe"
+                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-muted-foreground">Email Address</label>
-                <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required placeholder="name@company.com"
-                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                <label className="block text-xs font-medium text-muted-foreground">
+                  Email Address
+                </label>
+                <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  required
+                  placeholder="name@company.com"
+                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
               </div>
 
               <div>
                 <label className="block text-xs font-medium text-muted-foreground">Password</label>
-                <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required minLength={8} placeholder="Min 8 characters"
-                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  required
+                  minLength={8}
+                  placeholder="Min 8 characters"
+                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
               </div>
 
               <div className="grid grid-cols-3 gap-2">
                 <div>
                   <label className="block text-xs font-medium text-muted-foreground">Country</label>
-                  <select value={countryCode} onChange={(e) => setCountryCode(e.target.value)}
-                    className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                  <select
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  >
                     <option value="+91">IN (+91)</option>
                     <option value="+1">US (+1)</option>
                     <option value="+44">UK (+44)</option>
@@ -370,22 +445,39 @@ function AdminPanel() {
                   </select>
                 </div>
                 <div className="col-span-2">
-                  <label className="block text-xs font-medium text-muted-foreground">Phone Number</label>
-                  <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" required placeholder="Phone number"
-                    className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                  <label className="block text-xs font-medium text-muted-foreground">
+                    Phone Number
+                  </label>
+                  <input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    type="tel"
+                    required
+                    placeholder="Phone number"
+                    className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-muted-foreground">GST Number (Optional)</label>
-                <input value={gst} onChange={(e) => setGst(e.target.value)} placeholder="e.g. 22AAAAA0000A1Z5"
-                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+                <label className="block text-xs font-medium text-muted-foreground">
+                  GST Number (Optional)
+                </label>
+                <input
+                  value={gst}
+                  onChange={(e) => setGst(e.target.value)}
+                  placeholder="e.g. 22AAAAA0000A1Z5"
+                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                />
               </div>
 
               <div>
                 <label className="block text-xs font-medium text-muted-foreground">Role</label>
-                <select value={role} onChange={(e) => setRole(e.target.value)}
-                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+                <select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="mt-1 w-full h-10 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                >
                   <option value="admin">Admin</option>
                   <option value="manager">Manager</option>
                   <option value="employee">Employee</option>
@@ -393,12 +485,18 @@ function AdminPanel() {
               </div>
 
               <div className="pt-4 border-t border-border flex justify-end gap-2">
-                <button type="button" onClick={() => setIsModalOpen(false)}
-                  className="h-10 px-4 rounded-lg border border-border text-sm font-medium hover:bg-muted cursor-pointer">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="h-10 px-4 rounded-lg border border-border text-sm font-medium hover:bg-muted cursor-pointer"
+                >
                   Cancel
                 </button>
-                <button type="submit" disabled={submitting}
-                  className="h-10 px-4 rounded-lg bg-gradient-primary text-white text-sm font-medium shadow-glow cursor-pointer disabled:opacity-75">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="h-10 px-4 rounded-lg bg-gradient-primary text-white text-sm font-medium shadow-glow cursor-pointer disabled:opacity-75"
+                >
                   {submitting ? "Adding..." : "Add User"}
                 </button>
               </div>

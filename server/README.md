@@ -24,16 +24,16 @@ API listens on `http://localhost:4000` and serves under `/api/*`.
 
 ## Environment
 
-| Var | Default | Notes |
-|-----|---------|-------|
-| `PORT` | 4000 | |
-| `MONGO_URI` | mongodb://localhost:27017/nexora | MongoDB Atlas URI in prod |
-| `JWT_ACCESS_SECRET` | — | required, long random string |
-| `JWT_REFRESH_SECRET` | — | required, distinct from above |
-| `ACCESS_TOKEN_TTL` | 15m | jsonwebtoken format |
-| `REFRESH_TOKEN_TTL_DAYS` | 7 | rotated on each refresh |
-| `CORS_ORIGIN` | http://localhost:5173 | comma-separated allowlist |
-| `SEED_ON_REGISTER` | true | seeds 4 demo businesses + sample data per new user |
+| Var                      | Default                          | Notes                                              |
+| ------------------------ | -------------------------------- | -------------------------------------------------- |
+| `PORT`                   | 4000                             |                                                    |
+| `MONGO_URI`              | mongodb://localhost:27017/nexora | MongoDB Atlas URI in prod                          |
+| `JWT_ACCESS_SECRET`      | —                                | required, long random string                       |
+| `JWT_REFRESH_SECRET`     | —                                | required, distinct from above                      |
+| `ACCESS_TOKEN_TTL`       | 15m                              | jsonwebtoken format                                |
+| `REFRESH_TOKEN_TTL_DAYS` | 7                                | rotated on each refresh                            |
+| `CORS_ORIGIN`            | http://localhost:5173            | comma-separated allowlist                          |
+| `SEED_ON_REGISTER`       | true                             | seeds 4 demo businesses + sample data per new user |
 
 ## Routes
 

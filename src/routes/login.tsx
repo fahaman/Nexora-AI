@@ -44,23 +44,36 @@ function Login() {
             <div className="w-8 h-8 rounded-lg bg-gradient-primary grid place-items-center shadow-glow">
               <Sparkles className="w-4 h-4 text-white" />
             </div>
-            <span className="font-display font-semibold">Nexora<span className="text-gradient">AI</span></span>
+            <span className="font-display font-semibold">
+              Nexora<span className="text-gradient">AI</span>
+            </span>
           </Link>
           <div className="mt-auto">
-            <h2 className="font-display text-4xl font-semibold tracking-tight max-w-md">One login for every business you run.</h2>
-            <p className="mt-3 text-muted-foreground max-w-md">Sales, expenses, inventory, employees, AI insights — for every business, from one dashboard.</p>
+            <h2 className="font-display text-4xl font-semibold tracking-tight max-w-md">
+              One login for every business you run.
+            </h2>
+            <p className="mt-3 text-muted-foreground max-w-md">
+              Sales, expenses, inventory, employees, AI insights — for every business, from one
+              dashboard.
+            </p>
           </div>
         </div>
       </div>
       <div className="flex items-center justify-center p-6">
-        <form onSubmit={submit} className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-card">
+        <form
+          onSubmit={submit}
+          className="w-full max-w-sm rounded-2xl border border-border bg-card p-8 shadow-card"
+        >
           <h1 className="font-display text-2xl font-semibold tracking-tight">Welcome back</h1>
           <p className="text-sm text-muted-foreground mt-1">Sign in to your Nexora workspace.</p>
 
           {!apiConfigured() && (
             <div className="mt-4 p-3 rounded-lg border border-warning/40 bg-warning/10 text-xs text-warning flex gap-2">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-              <span>Backend not configured. Set <code className="font-mono">VITE_API_URL</code>. Demo mode allows any credentials.</span>
+              <span>
+                Backend not configured. Set <code className="font-mono">VITE_API_URL</code>. Demo
+                mode allows any credentials.
+              </span>
             </div>
           )}
 
@@ -72,19 +85,44 @@ function Login() {
           )}
 
           <label className="block mt-6 text-xs font-medium text-muted-foreground">Email</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required autoComplete="email"
-            className="mt-1 w-full h-11 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            required
+            autoComplete="email"
+            className="mt-1 w-full h-11 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
 
           <label className="block mt-4 text-xs font-medium text-muted-foreground">Password</label>
-          <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" required autoComplete="current-password" minLength={apiConfigured() ? 8 : 1}
-            className="mt-1 w-full h-11 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50" />
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            required
+            autoComplete="current-password"
+            minLength={apiConfigured() ? 8 : 1}
+            className="mt-1 w-full h-11 rounded-lg bg-muted/60 border border-border px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+          />
 
-          <button disabled={loading} className="mt-6 w-full h-11 rounded-lg bg-gradient-primary text-white font-medium shadow-glow inline-flex items-center justify-center gap-2 disabled:opacity-70">
-            {loading ? "Signing in…" : (<>Sign in <ArrowRight className="w-4 h-4" /></>)}
+          <button
+            disabled={loading}
+            className="mt-6 w-full h-11 rounded-lg bg-gradient-primary text-white font-medium shadow-glow inline-flex items-center justify-center gap-2 disabled:opacity-70"
+          >
+            {loading ? (
+              "Signing in…"
+            ) : (
+              <>
+                Sign in <ArrowRight className="w-4 h-4" />
+              </>
+            )}
           </button>
 
           <p className="mt-6 text-xs text-center text-muted-foreground">
-            New here? <Link to="/register" className="text-primary font-medium">Create an account</Link>
+            New here?{" "}
+            <Link to="/register" className="text-primary font-medium">
+              Create an account
+            </Link>
           </p>
         </form>
       </div>

@@ -38,7 +38,11 @@ router.get(
     if (businessId && businessId !== "all") filter.businessId = new Types.ObjectId(businessId);
     if (q) filter.product = { $regex: q, $options: "i" };
     const [items, total] = await Promise.all([
-      SaleModel.find(filter).sort({ occurredAt: -1 }).skip((page - 1) * pageSize).limit(pageSize).populate("businessId", "name emoji"),
+      SaleModel.find(filter)
+        .sort({ occurredAt: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .populate("businessId", "name emoji"),
       SaleModel.countDocuments(filter),
     ]);
     res.json({ items, total, page, pageSize });

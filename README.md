@@ -2,7 +2,7 @@
 
 Two parts:
 
-- **Frontend** (this folder) — TanStack Start + React 19 + Tailwind v4, deployed on Lovable / Cloudflare Workers.
+- **Frontend** (this folder) — TanStack Start + React 19 + Tailwind v4, deployed on Cloudflare Workers.
 - **Backend** ([`server/`](./server)) — Node + Express + Mongoose + JWT, deployed separately (Render, Railway, Fly, etc.).
 
 ## 1. Run the backend

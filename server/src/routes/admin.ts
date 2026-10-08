@@ -19,15 +19,12 @@ import { seedForUser } from "../services/seed.js";
 const router = Router();
 
 // Middleware to restrict access to ONLY admin@nexora.com
-router.use(
-  requireAuth,
-  (req, res, next) => {
-    if (req.user?.email !== "admin@nexora.com") {
-      return res.status(403).json({ error: "Access denied. Admin only." });
-    }
-    next();
+router.use(requireAuth, (req, res, next) => {
+  if (req.user?.email !== "admin@nexora.com") {
+    return res.status(403).json({ error: "Access denied. Admin only." });
   }
-);
+  next();
+});
 
 const addUserSchema = z.object({
   email: z.string().email().max(255).toLowerCase().trim(),
@@ -44,14 +41,16 @@ router.post(
   "/users",
   validate(addUserSchema),
   ah(async (req, res) => {
-    const { email, password, name, role, phone, countryCode, gst } = req.body as z.infer<typeof addUserSchema>;
-    
+    const { email, password, name, role, phone, countryCode, gst } = req.body as z.infer<
+      typeof addUserSchema
+    >;
+
     const exists = await UserModel.findOne({ email });
     if (exists) throw new HttpError(409, "Email already registered");
 
     const passwordHash = await bcrypt.hash(password, 12);
     const user = await UserModel.create({ email, passwordHash, role });
-    
+
     await ProfileModel.create({
       userId: user._id,
       name,
@@ -69,7 +68,7 @@ router.post(
       role: user.role,
       name,
     });
-  })
+  }),
 );
 
 // Delete user endpoint
@@ -77,7 +76,7 @@ router.delete(
   "/users/:id",
   ah(async (req, res) => {
     const { id } = req.params;
-    
+
     const user = await UserModel.findById(id);
     if (!user) throw new HttpError(404, "User not found");
     if (user.email === "admin@nexora.com") {
@@ -96,7 +95,7 @@ router.delete(
     await UserModel.deleteOne({ _id: id });
 
     res.json({ ok: true });
-  })
+  }),
 );
 
 // Dashboard stats endpoint
@@ -108,7 +107,7 @@ router.get(
 
     // Fetch all users
     const users = await UserModel.find({}, { passwordHash: 0 }).lean();
-    
+
     // Fetch all profiles
     const profiles = await ProfileModel.find({}).lean();
 
@@ -137,17 +136,17 @@ router.get(
     // Combine business details with owners and calculate health status
     const businessList = businesses.map((biz) => {
       const owner = users.find((u) => String(u._id) === String(biz.ownerId));
-      
+
       const bizSales = sales
         .filter((s) => String(s.businessId) === String(biz._id))
         .reduce((a, s) => a + s.amount, 0);
       const bizExpenses = expenses
         .filter((e) => String(e.businessId) === String(biz._id))
         .reduce((a, e) => a + e.amount, 0);
-      
+
       const profit = bizSales - bizExpenses;
       // Doing well if profit is positive and has sales. Otherwise needs consultancy.
-      const status = (bizSales > 0 && profit > 0) ? "Doing Well" : "Needs Consultancy";
+      const status = bizSales > 0 && profit > 0 ? "Doing Well" : "Needs Consultancy";
 
       return {
         id: biz._id,
@@ -179,7 +178,7 @@ router.get(
       users: userList,
       businesses: businessList,
     });
-  })
+  }),
 );
 
 export default router;

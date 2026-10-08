@@ -29,9 +29,24 @@ router.get(
     const startPrev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const startYear = new Date(now.getFullYear(), 0, 1);
 
-    const [revAgg, expAgg, revThis, revPrev, businessesCount, employeesCount, inventoryCount, monthly] = await Promise.all([
-      SaleModel.aggregate([{ $match: bizFilter }, { $group: { _id: null, sum: { $sum: "$amount" } } }]),
-      ExpenseModel.aggregate([{ $match: bizFilter }, { $group: { _id: null, sum: { $sum: "$amount" } } }]),
+    const [
+      revAgg,
+      expAgg,
+      revThis,
+      revPrev,
+      businessesCount,
+      employeesCount,
+      inventoryCount,
+      monthly,
+    ] = await Promise.all([
+      SaleModel.aggregate([
+        { $match: bizFilter },
+        { $group: { _id: null, sum: { $sum: "$amount" } } },
+      ]),
+      ExpenseModel.aggregate([
+        { $match: bizFilter },
+        { $group: { _id: null, sum: { $sum: "$amount" } } },
+      ]),
       SaleModel.aggregate([
         { $match: { ...bizFilter, occurredAt: { $gte: startThis } } },
         { $group: { _id: null, sum: { $sum: "$amount" } } },
@@ -61,7 +76,20 @@ router.get(
     ]);
 
     const expMap = new Map(monthlyExp.map((m) => [m._id.m as number, m.expenses as number]));
-    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     const series = Array.from({ length: 12 }, (_, i) => {
       const m = i + 1;
       const sales = monthly.find((x) => x._id.m === m)?.sales ?? 0;
@@ -85,7 +113,15 @@ router.get(
     ]);
 
     res.json({
-      kpis: { revenue, expenses, profit, growth, employees: employeesCount, inventory: inventoryCount, businesses: businessesCount },
+      kpis: {
+        revenue,
+        expenses,
+        profit,
+        growth,
+        employees: employeesCount,
+        inventory: inventoryCount,
+        businesses: businessesCount,
+      },
       series,
       categoryShare: byBiz,
     });

@@ -45,7 +45,9 @@ router.post(
   "/register",
   validate(registerSchema),
   ah(async (req, res) => {
-    const { email, password, name, phone, countryCode, gst } = req.body as z.infer<typeof registerSchema>;
+    const { email, password, name, phone, countryCode, gst } = req.body as z.infer<
+      typeof registerSchema
+    >;
     const exists = await UserModel.findOne({ email });
     if (exists) throw new HttpError(409, "Email already registered");
 

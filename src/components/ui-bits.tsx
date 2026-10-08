@@ -1,6 +1,14 @@
 import { cn } from "@/lib/utils";
 
-export function PageHeader({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) {
+export function PageHeader({
+  title,
+  subtitle,
+  action,
+}: {
+  title: string;
+  subtitle?: string;
+  action?: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
       <div>
@@ -12,7 +20,17 @@ export function PageHeader({ title, subtitle, action }: { title: string; subtitl
   );
 }
 
-export function Panel({ children, className, title, action }: { children: React.ReactNode; className?: string; title?: string; action?: React.ReactNode }) {
+export function Panel({
+  children,
+  className,
+  title,
+  action,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  title?: string;
+  action?: React.ReactNode;
+}) {
   return (
     <section className={cn("rounded-2xl border border-border bg-card shadow-card p-5", className)}>
       {(title || action) && (

@@ -66,7 +66,10 @@ router.delete(
   "/:id",
   requireRole("admin"),
   ah(async (req, res) => {
-    const out = await EmployeeModel.findOneAndDelete({ _id: req.params.id, ownerId: req.user!.sub });
+    const out = await EmployeeModel.findOneAndDelete({
+      _id: req.params.id,
+      ownerId: req.user!.sub,
+    });
     if (!out) throw new HttpError(404, "Employee not found");
     res.json({ ok: true });
   }),

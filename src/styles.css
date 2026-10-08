@@ -98,9 +98,10 @@
   --gradient-cyan: linear-gradient(135deg, oklch(0.7 0.18 210), oklch(0.55 0.2 250));
   --gradient-success: linear-gradient(135deg, oklch(0.72 0.18 155), oklch(0.65 0.18 185));
   --gradient-warning: linear-gradient(135deg, oklch(0.78 0.17 75), oklch(0.7 0.2 35));
-  --gradient-hero: radial-gradient(60% 80% at 20% 10%, oklch(0.6 0.24 280 / 0.25), transparent 60%),
-                   radial-gradient(50% 70% at 80% 30%, oklch(0.7 0.2 220 / 0.22), transparent 60%),
-                   radial-gradient(60% 60% at 50% 100%, oklch(0.6 0.25 295 / 0.2), transparent 60%);
+  --gradient-hero:
+    radial-gradient(60% 80% at 20% 10%, oklch(0.6 0.24 280 / 0.25), transparent 60%),
+    radial-gradient(50% 70% at 80% 30%, oklch(0.7 0.2 220 / 0.22), transparent 60%),
+    radial-gradient(60% 60% at 50% 100%, oklch(0.6 0.25 295 / 0.2), transparent 60%);
 
   --shadow-glow: 0 20px 60px -20px oklch(0.55 0.22 280 / 0.45);
   --shadow-card: 0 10px 30px -12px oklch(0.2 0.05 270 / 0.15);
@@ -154,26 +155,55 @@
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
-  html, body { font-family: var(--font-sans); }
+  * {
+    border-color: var(--color-border);
+  }
+  html,
+  body {
+    font-family: var(--font-sans);
+  }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
 }
 
 @layer utilities {
-  .bg-gradient-primary { background-image: var(--gradient-primary); }
-  .bg-gradient-violet { background-image: var(--gradient-violet); }
-  .bg-gradient-cyan { background-image: var(--gradient-cyan); }
-  .bg-gradient-success { background-image: var(--gradient-success); }
-  .bg-gradient-warning { background-image: var(--gradient-warning); }
-  .bg-gradient-hero { background-image: var(--gradient-hero); }
-  .shadow-glow { box-shadow: var(--shadow-glow); }
-  .shadow-card { box-shadow: var(--shadow-card); }
-  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .bg-gradient-primary {
+    background-image: var(--gradient-primary);
+  }
+  .bg-gradient-violet {
+    background-image: var(--gradient-violet);
+  }
+  .bg-gradient-cyan {
+    background-image: var(--gradient-cyan);
+  }
+  .bg-gradient-success {
+    background-image: var(--gradient-success);
+  }
+  .bg-gradient-warning {
+    background-image: var(--gradient-warning);
+  }
+  .bg-gradient-hero {
+    background-image: var(--gradient-hero);
+  }
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
 
   .glass {
     background-color: color-mix(in oklab, var(--card) 70%, transparent);
@@ -196,9 +226,16 @@
 
   .grid-bg {
     background-image:
-      linear-gradient(to right, color-mix(in oklab, var(--border) 50%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklab, var(--border) 50%, transparent) 1px, transparent 1px);
+      linear-gradient(
+        to right,
+        color-mix(in oklab, var(--border) 50%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--border) 50%, transparent) 1px,
+        transparent 1px
+      );
     background-size: 32px 32px;
   }
 }
-

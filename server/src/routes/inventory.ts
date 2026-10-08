@@ -32,12 +32,18 @@ router.get(
   "/",
   validate(querySchema, "query"),
   ah(async (req, res) => {
-    const { businessId, q, low, page, pageSize } = req.query as unknown as z.infer<typeof querySchema>;
+    const { businessId, q, low, page, pageSize } = req.query as unknown as z.infer<
+      typeof querySchema
+    >;
     const filter: Record<string, unknown> = { ownerId: req.user!.sub };
     if (businessId && businessId !== "all") filter.businessId = new Types.ObjectId(businessId);
     if (q) filter.name = { $regex: q, $options: "i" };
     const [items, total] = await Promise.all([
-      InventoryItemModel.find(filter).sort({ name: 1 }).skip((page - 1) * pageSize).limit(pageSize).populate("businessId", "name emoji"),
+      InventoryItemModel.find(filter)
+        .sort({ name: 1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .populate("businessId", "name emoji"),
       InventoryItemModel.countDocuments(filter),
     ]);
     const filtered = low ? items.filter((i) => i.qty <= i.threshold) : items;
@@ -71,7 +77,10 @@ router.put(
 router.delete(
   "/:id",
   ah(async (req, res) => {
-    const out = await InventoryItemModel.findOneAndDelete({ _id: req.params.id, ownerId: req.user!.sub });
+    const out = await InventoryItemModel.findOneAndDelete({
+      _id: req.params.id,
+      ownerId: req.user!.sub,
+    });
     if (!out) throw new HttpError(404, "Item not found");
     res.json({ ok: true });
   }),

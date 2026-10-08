@@ -50,7 +50,10 @@ router.put(
 router.delete(
   "/:id",
   ah(async (req, res) => {
-    const out = await BusinessModel.findOneAndDelete({ _id: req.params.id, ownerId: req.user!.sub });
+    const out = await BusinessModel.findOneAndDelete({
+      _id: req.params.id,
+      ownerId: req.user!.sub,
+    });
     if (!out) throw new HttpError(404, "Business not found");
     res.json({ ok: true });
   }),

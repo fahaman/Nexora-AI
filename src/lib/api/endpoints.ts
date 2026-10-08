@@ -13,12 +13,22 @@ export interface AuthResponse {
 }
 
 export const authApi = {
-  register: (input: { email: string; password: string; name: string; phone?: string; countryCode?: string; gst?: string }) =>
-    apiFetch<AuthResponse>("/api/auth/register", { method: "POST", body: input, auth: false }),
+  register: (input: {
+    email: string;
+    password: string;
+    name: string;
+    phone?: string;
+    countryCode?: string;
+    gst?: string;
+  }) => apiFetch<AuthResponse>("/api/auth/register", { method: "POST", body: input, auth: false }),
   login: (input: { email: string; password: string }) =>
     apiFetch<AuthResponse>("/api/auth/login", { method: "POST", body: input, auth: false }),
   logout: (refreshToken: string) =>
-    apiFetch<{ ok: true }>("/api/auth/logout", { method: "POST", body: { refreshToken }, auth: false }),
+    apiFetch<{ ok: true }>("/api/auth/logout", {
+      method: "POST",
+      body: { refreshToken },
+      auth: false,
+    }),
   me: () => apiFetch<AuthUser & { activeBusinessId: string | null }>("/api/auth/me"),
 };
 
@@ -57,7 +67,8 @@ export interface AdminDashboardResponse {
 
 export const adminApi = {
   getDashboard: () => apiFetch<AdminDashboardResponse>("/api/admin/dashboard"),
-  addUser: (user: Record<string, any>) => apiFetch<any>("/api/admin/users", { method: "POST", body: user }),
+  addUser: (user: Record<string, any>) =>
+    apiFetch<any>("/api/admin/users", { method: "POST", body: user }),
   deleteUser: (id: string) => apiFetch<any>(`/api/admin/users/${id}`, { method: "DELETE" }),
 };
 
@@ -71,7 +82,8 @@ export interface Business {
 
 export const businessesApi = {
   list: () => apiFetch<{ items: Business[] }>("/api/businesses"),
-  create: (b: Partial<Business>) => apiFetch<Business>("/api/businesses", { method: "POST", body: b }),
+  create: (b: Partial<Business>) =>
+    apiFetch<Business>("/api/businesses", { method: "POST", body: b }),
   update: (id: string, b: Partial<Business>) =>
     apiFetch<Business>(`/api/businesses/${id}`, { method: "PUT", body: b }),
   remove: (id: string) => apiFetch<{ ok: true }>(`/api/businesses/${id}`, { method: "DELETE" }),
@@ -109,9 +121,17 @@ export interface Sale {
 
 export const salesApi = {
   list: (q: { businessId?: string; q?: string; page?: number; pageSize?: number }) =>
-    apiFetch<{ items: Sale[]; total: number; page: number; pageSize: number }>("/api/sales", { query: q }),
-  create: (body: { businessId: string; product: string; quantity: number; unitPrice: number; inventoryItemId?: string | null; customer?: string }) =>
-    apiFetch<Sale>("/api/sales", { method: "POST", body }),
+    apiFetch<{ items: Sale[]; total: number; page: number; pageSize: number }>("/api/sales", {
+      query: q,
+    }),
+  create: (body: {
+    businessId: string;
+    product: string;
+    quantity: number;
+    unitPrice: number;
+    inventoryItemId?: string | null;
+    customer?: string;
+  }) => apiFetch<Sale>("/api/sales", { method: "POST", body }),
   remove: (id: string) => apiFetch<{ ok: true }>(`/api/sales/${id}`, { method: "DELETE" }),
 };
 
@@ -126,7 +146,9 @@ export interface Expense {
 
 export const expensesApi = {
   list: (q: { businessId?: string; q?: string; page?: number; pageSize?: number }) =>
-    apiFetch<{ items: Expense[]; total: number; page: number; pageSize: number }>("/api/expenses", { query: q }),
+    apiFetch<{ items: Expense[]; total: number; page: number; pageSize: number }>("/api/expenses", {
+      query: q,
+    }),
   create: (body: { businessId: string; category: string; amount: number; note?: string }) =>
     apiFetch<Expense>("/api/expenses", { method: "POST", body }),
   remove: (id: string) => apiFetch<{ ok: true }>(`/api/expenses/${id}`, { method: "DELETE" }),
@@ -146,8 +168,15 @@ export interface InventoryItem {
 export const inventoryApi = {
   list: (q: { businessId?: string; q?: string; low?: boolean }) =>
     apiFetch<{ items: InventoryItem[]; total: number }>("/api/inventory", { query: q }),
-  create: (body: Partial<InventoryItem> & { businessId: string; name: string; qty: number; threshold: number; unitPrice: number }) =>
-    apiFetch<InventoryItem>("/api/inventory", { method: "POST", body }),
+  create: (
+    body: Partial<InventoryItem> & {
+      businessId: string;
+      name: string;
+      qty: number;
+      threshold: number;
+      unitPrice: number;
+    },
+  ) => apiFetch<InventoryItem>("/api/inventory", { method: "POST", body }),
   update: (id: string, body: Partial<InventoryItem>) =>
     apiFetch<InventoryItem>(`/api/inventory/${id}`, { method: "PUT", body }),
   remove: (id: string) => apiFetch<{ ok: true }>(`/api/inventory/${id}`, { method: "DELETE" }),
@@ -165,8 +194,9 @@ export interface Employee {
 export const employeesApi = {
   list: (q: { businessId?: string; q?: string }) =>
     apiFetch<{ items: Employee[] }>("/api/employees", { query: q }),
-  create: (body: Partial<Employee> & { businessId: string; name: string; role: string; salary: number }) =>
-    apiFetch<Employee>("/api/employees", { method: "POST", body }),
+  create: (
+    body: Partial<Employee> & { businessId: string; name: string; role: string; salary: number },
+  ) => apiFetch<Employee>("/api/employees", { method: "POST", body }),
   update: (id: string, body: Partial<Employee>) =>
     apiFetch<Employee>(`/api/employees/${id}`, { method: "PUT", body }),
   remove: (id: string) => apiFetch<{ ok: true }>(`/api/employees/${id}`, { method: "DELETE" }),

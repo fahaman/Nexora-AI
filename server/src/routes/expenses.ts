@@ -37,7 +37,11 @@ router.get(
     if (businessId && businessId !== "all") filter.businessId = new Types.ObjectId(businessId);
     if (q) filter.category = { $regex: q, $options: "i" };
     const [items, total] = await Promise.all([
-      ExpenseModel.find(filter).sort({ occurredAt: -1 }).skip((page - 1) * pageSize).limit(pageSize).populate("businessId", "name emoji"),
+      ExpenseModel.find(filter)
+        .sort({ occurredAt: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
+        .populate("businessId", "name emoji"),
       ExpenseModel.countDocuments(filter),
     ]);
     res.json({ items, total, page, pageSize });

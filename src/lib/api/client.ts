@@ -114,11 +114,14 @@ export async function apiFetch<T = unknown>(path: string, opts: RequestOpts = {}
   }
 
   const ct = res.headers.get("content-type") ?? "";
-  const data = ct.includes("application/json") ? await res.json().catch(() => null) : await res.text().catch(() => null);
+  const data = ct.includes("application/json")
+    ? await res.json().catch(() => null)
+    : await res.text().catch(() => null);
   if (!res.ok) {
-    const msg = (data && typeof data === "object" && "error" in (data as Record<string, unknown>))
-      ? String((data as { error: unknown }).error)
-      : res.statusText || "Request failed";
+    const msg =
+      data && typeof data === "object" && "error" in (data as Record<string, unknown>)
+        ? String((data as { error: unknown }).error)
+        : res.statusText || "Request failed";
     throw new ApiError(res.status, msg, data);
   }
   return data as T;

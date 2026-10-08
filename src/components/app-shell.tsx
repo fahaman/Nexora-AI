@@ -1,8 +1,21 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import {
-  LayoutDashboard, Building2, ShoppingCart, Receipt, Package,
-  Users, BarChart3, Settings, Sparkles, Bell, Search, LogOut, Moon, Sun, ShieldAlert
+  LayoutDashboard,
+  Building2,
+  ShoppingCart,
+  Receipt,
+  Package,
+  Users,
+  BarChart3,
+  Settings,
+  Sparkles,
+  Bell,
+  Search,
+  LogOut,
+  Moon,
+  Sun,
+  ShieldAlert,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { authStore, useAuth } from "@/lib/auth-store";
@@ -21,8 +34,11 @@ const navItems = [
   { to: "/app/settings", label: "Settings", icon: Settings },
 ];
 
+import { useAppData, appStore } from "@/lib/app-store";
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { user, businessId } = useAuth();
+  const { businesses } = useAppData();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [dark, setDark] = useState(() => {
@@ -39,8 +55,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     localStorage.setItem("nexora.theme", dark ? "dark" : "light");
   }, [dark]);
 
-  const userInitials = user?.name ? user.name.split(" ").map((s) => s[0]).slice(0, 2).join("").toUpperCase() : "U";
-  const activeBiz = businesses.find((b) => b.id === businessId) ?? businesses[0];
+  const userInitials = user?.name
+    ? user.name
+        .split(" ")
+        .map((s) => s[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase()
+    : "U";
+  const activeBiz = businesses.find((b) => b.id === businessId) ?? {
+    id: "all",
+    name: "All Businesses",
+    emoji: "🌐",
+  };
 
   return (
     <div className="min-h-screen flex bg-background text-foreground">
@@ -50,18 +77,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="w-8 h-8 rounded-lg bg-gradient-primary shadow-glow grid place-items-center">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
-          <span className="font-display text-lg font-semibold tracking-tight">Nexora<span className="text-gradient">AI</span></span>
+          <span className="font-display text-lg font-semibold tracking-tight">
+            Nexora<span className="text-gradient">AI</span>
+          </span>
         </Link>
 
         <div className="px-3 py-4">
-          <div className="px-3 text-[11px] uppercase tracking-wider text-sidebar-foreground/50 mb-2">Active business</div>
+          <div className="px-3 text-[11px] uppercase tracking-wider text-sidebar-foreground/50 mb-2">
+            Active business
+          </div>
           <select
             value={businessId}
             onChange={(e) => authStore.setBusiness(e.target.value)}
-            className="w-full bg-sidebar-accent/60 text-sidebar-foreground border border-sidebar-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+            className="w-full bg-sidebar-accent/60 text-sidebar-foreground border border-sidebar-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
           >
+            <option value="all">🌐 All Businesses ({businesses.length})</option>
             {businesses.map((b) => (
-              <option key={b.id} value={b.id}>{b.emoji}  {b.name}</option>
+              <option key={b.id} value={b.id}>
+                {b.emoji} {b.name}
+              </option>
             ))}
           </select>
         </div>
@@ -99,7 +133,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
         <div className="p-3 border-t border-sidebar-border">
           <button
-            onClick={() => { authStore.logout(); navigate({ to: "/login" }); }}
+            onClick={() => {
+              authStore.logout();
+              navigate({ to: "/login" });
+            }}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/40 transition"
           >
             <LogOut className="w-4 h-4" />
@@ -117,8 +154,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="lg:hidden font-display font-semibold text-gradient">NexoraAI</div>
           <div className="hidden md:flex items-center gap-2 px-3 h-10 rounded-lg bg-muted/60 border border-border w-full max-w-md">
             <Search className="w-4 h-4 text-muted-foreground" />
-            <input placeholder="Search sales, products, employees…" className="bg-transparent text-sm flex-1 focus:outline-none" />
-            <kbd className="text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">⌘K</kbd>
+            <input
+              placeholder="Search sales, products, employees…"
+              className="bg-transparent text-sm flex-1 focus:outline-none"
+            />
+            <kbd className="text-[10px] text-muted-foreground border border-border rounded px-1.5 py-0.5">
+              ⌘K
+            </kbd>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <div className="hidden sm:flex items-center gap-2 px-3 h-10 rounded-lg border border-border bg-card">
@@ -128,28 +170,43 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <div className="text-sm font-medium">{activeBiz.name}</div>
               </div>
             </div>
-            <button onClick={() => setDark((d) => !d)} className="w-10 h-10 grid place-items-center rounded-lg border border-border hover:bg-muted cursor-pointer">
+            <button
+              onClick={() => setDark((d) => !d)}
+              className="w-10 h-10 grid place-items-center rounded-lg border border-border hover:bg-muted cursor-pointer"
+            >
               {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <div className="relative">
-              <button onClick={() => setNotifOpen((o) => !o)} className="w-10 h-10 grid place-items-center rounded-lg border border-border hover:bg-muted relative cursor-pointer">
+              <button
+                onClick={() => setNotifOpen((o) => !o)}
+                className="w-10 h-10 grid place-items-center rounded-lg border border-border hover:bg-muted relative cursor-pointer"
+              >
                 <Bell className="w-4 h-4" />
                 <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-destructive" />
               </button>
               {notifOpen && (
                 <motion.div
-                  initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
                   className="absolute right-0 mt-2 w-80 rounded-xl glass shadow-card p-2 z-40"
                 >
-                  <div className="px-3 py-2 text-xs uppercase tracking-wider text-muted-foreground">Notifications</div>
+                  <div className="px-3 py-2 text-xs uppercase tracking-wider text-muted-foreground">
+                    Notifications
+                  </div>
                   {notifications.map((n) => (
-                    <div key={n.id} className="px-3 py-2 rounded-lg hover:bg-muted/60 flex gap-3 items-start">
-                      <span className={cn("mt-1.5 w-2 h-2 rounded-full",
-                        n.tone === "warning" && "bg-warning",
-                        n.tone === "destructive" && "bg-destructive",
-                        n.tone === "success" && "bg-success",
-                        n.tone === "primary" && "bg-primary",
-                      )} />
+                    <div
+                      key={n.id}
+                      className="px-3 py-2 rounded-lg hover:bg-muted/60 flex gap-3 items-start"
+                    >
+                      <span
+                        className={cn(
+                          "mt-1.5 w-2 h-2 rounded-full",
+                          n.tone === "warning" && "bg-warning",
+                          n.tone === "destructive" && "bg-destructive",
+                          n.tone === "success" && "bg-success",
+                          n.tone === "primary" && "bg-primary",
+                        )}
+                      />
                       <div className="flex-1">
                         <div className="text-sm">{n.title}</div>
                         <div className="text-xs text-muted-foreground">{n.time}</div>
@@ -162,9 +219,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        <main className="flex-1 p-4 lg:p-8 max-w-[1600px] w-full mx-auto">
-          {children}
-        </main>
+        <main className="flex-1 p-4 lg:p-8 max-w-[1600px] w-full mx-auto">{children}</main>
       </div>
     </div>
   );

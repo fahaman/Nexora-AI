@@ -70,7 +70,7 @@ async function seedAdminUser() {
       name: "System Admin",
       phone: "",
       countryCode: "",
-      gst: ""
+      gst: "",
     });
     console.log("[seed] Default admin user seeded successfully.");
   }
