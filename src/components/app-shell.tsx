@@ -71,9 +71,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     emoji: "🌐",
   };
 
-  const navList = user?.email === "admin@nexora.com"
-    ? [...navItems, { to: "/app/admin", label: "Admin Panel", icon: ShieldAlert }]
-    : navItems;
+  const navList =
+    user?.email === "admin@nexora.com"
+      ? [...navItems, { to: "/app/admin", label: "Admin Panel", icon: ShieldAlert }]
+      : navItems;
 
   return (
     <div className="min-h-screen flex bg-background text-foreground">
@@ -157,7 +158,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           />
           <aside className="relative w-72 max-w-[80vw] bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col h-full z-10 shadow-2xl animate-in slide-in-from-left duration-200">
             <div className="px-6 h-16 flex items-center justify-between border-b border-sidebar-border">
-              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2"
+              >
                 <div className="w-8 h-8 rounded-lg bg-gradient-primary shadow-glow grid place-items-center">
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
@@ -245,7 +250,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="w-9 h-9 rounded-lg bg-gradient-violet grid place-items-center text-white font-semibold shadow-soft shrink-0 text-sm">
             {userInitials}
           </div>
-          <div className="lg:hidden font-display font-semibold text-gradient text-base">NexoraAI</div>
+          <div className="lg:hidden font-display font-semibold text-gradient text-base">
+            NexoraAI
+          </div>
 
           <div className="hidden md:flex items-center gap-2 px-3 h-10 rounded-lg bg-muted/60 border border-border w-full max-w-md">
             <Search className="w-4 h-4 text-muted-foreground" />
@@ -262,7 +269,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="hidden sm:flex items-center gap-2 px-3 h-10 rounded-lg border border-border bg-card">
               <span className="text-lg leading-none">{activeBiz.emoji}</span>
               <div className="leading-tight">
-                <div className="text-[10px] text-muted-foreground uppercase font-medium">Viewing</div>
+                <div className="text-[10px] text-muted-foreground uppercase font-medium">
+                  Viewing:
+                </div>
                 <div className="text-xs font-semibold">{activeBiz.name}</div>
               </div>
             </div>
